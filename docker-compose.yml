@@ -1,0 +1,41 @@
+
+services:
+  database:
+    image: postgres:latest
+    environment:
+      POSTGRES_USER: raul
+      POSTGRES_PASSWORD: 1234
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    networks:
+      - mired
+
+
+  pgadmin:
+    container_name: pgadmin_container
+    image: dpage/pgadmin4
+    restart: unless-stopped
+    volumes:
+      - pgadmin_data:/var/lib/pgadmin
+    environment:
+      PGADMIN_DEFAULT_EMAIL: raul240sx@hotmail.com
+      PGADMIN_DEFAULT_PASSWORD: 789
+      PGADMIN_LISTEN_PORT: 8080
+      PGADMIN_CONFIG_PROXY_X_HOST_COUNT: 1
+      PGADMIN_CONFIG_PROXY_X_PREFIX_COUNT: 1
+    ports:
+      - "8080:8080"
+    depends_on:
+      - database
+    networks:
+      - mired
+
+volumes:
+  postgres_data:
+  pgadmin_data:
+
+networks:
+  mired:
+    driver: bridge
